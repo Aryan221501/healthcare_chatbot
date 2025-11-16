@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Healthcare Chatbot - Dynamic Interface</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/static/styles.css?v=2.0">
+    <style>
+      /* Entrance animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeOut {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+      }
+
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .fade-in-element {
+        animation: fadeIn 0.8s ease-out forwards;
+        opacity: 0;
+      }
+
+      .fade-up-element {
+        animation: fadeInUp 0.6s ease-out forwards;
+        opacity: 0;
+      }
+
+      .slide-in-right {
+        animation: slideInRight 0.6s ease-out forwards;
+        opacity: 0;
+      }
+
+      .slide-in-left {
+        animation: slideInLeft 0.6s ease-out forwards;
+        opacity: 0;
+      }
+
+      .delay-1 {
+        animation-delay: 0.1s;
+      }
+
+      .delay-2 {
+        animation-delay: 0.2s;
+      }
+
+      .delay-3 {
+        animation-delay: 0.3s;
+      }
+
+      .delay-4 {
+        animation-delay: 0.4s;
+      }
+
+      .delay-5 {
+        animation-delay: 0.5s;
+      }
+
+      .delay-6 {
+        animation-delay: 0.6s;
+      }
+
+      /* Loading screen */
+      .loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #0a0e1a;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        transition: opacity 0.5s ease-out;
+      }
+
+      .loading-screen.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .loader {
+        width: 60px;
+        height: 60px;
+        border: 4px solid #374151;
+        border-top-color: #10b981;
+        border-right-color: #10b981;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+      }
+
+      .loading-text {
+        margin-top: 20px;
+        color: #10b981;
+        font-weight: 600;
+        font-size: 1.1rem;
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+      <div class="loader"></div>
+      <div class="loading-text">
+        <i class="bi bi-heart-pulse-fill me-2"></i>
+        Loading HealthBot AI...
+      </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark fade-in-element">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+          <i class="bi bi-heart-pulse-fill me-2"></i>
+          <span>HealthBot AI</span>
+        </a>
+
+        <div class="d-flex align-items-center gap-2">
+          <div class="dropdown">
+            <button class="btn btn-outline-light dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-translate"></i> <span class="d-none d-md-inline">Language</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+              <li><a class="dropdown-item active" href="#" data-lang="en"><i class="bi bi-check-circle-fill me-2"></i>English</a></li>
+              <li><a class="dropdown-item" href="#" data-lang="hi"><i class="bi bi-circle me-2"></i>हिंदी (Hindi)</a></li>
+            </ul>
+          </div>
+
+          <button class="btn btn-outline-light" type="button" onclick="clearChat()" title="Clear chat">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-4 fade-in-element">
+      <div class="row">
+        <div class="col-md-10 offset-md-1">
+          <div class="card shadow-lg fade-up-element delay-1">
+            <!-- Chat header -->
+            <div class="card-header d-flex justify-content-between align-items-center py-3">
+              <div class="slide-in-left delay-1">
+                <h5 class="mb-1">
+                  <i class="bi bi-robot me-2"></i>HealthBot AI
+                </h5>
+                <small class="text-success d-flex align-items-center">
+                  <i class="bi bi-circle-fill me-1" style="font-size: 0.5rem;"></i>
+                  <span>Online & Ready to Help</span>
+                </small>
+              </div>
+              <div class="slide-in-right delay-1">
+                <button class="btn btn-sm btn-outline-light" title="Clear chat" onclick="clearChat()">
+                  <i class="bi bi-trash"></i> <span class="d-none d-md-inline">Clear</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Chat window -->
+            <div class="card-body p-0">
+              <div class="chat-window px-3 py-2" id="chatWindow">
+                <!-- Messages will appear here -->
+              </div>
+            </div>
+
+            <!-- Chat footer -->
+            <div class="card-footer">
+              <form id="chatForm">
+                {% csrf_token %}
+                <div class="input-group fade-up-element delay-2">
+                  <textarea
+                    id="textInput"
+                    class="form-control"
+                    placeholder="💬 Type your message here..."
+                    rows="1"
+                    style="resize: none; height: auto; max-height: 120px;"
+                    autocomplete="off"
+                  ></textarea>
+                  <button class="btn btn-primary btn-send ripple" type="submit" id="sendButton" disabled>
+                    <i class="bi bi-send-fill"></i>
+                    <span class="d-none d-md-inline ms-2">Send</span>
+                  </button>
+                </div>
+              </form>
+
+              <div class="mt-3 fade-up-element delay-3">
+                <small class="text-muted d-block mb-2">
+                  <i class="bi bi-lightning-charge-fill me-1"></i>Quick actions:
+                </small>
+                <div class="d-flex flex-wrap gap-2">
+                  <button type="button" class="btn btn-sm btn-outline-primary ripple" onclick="quickSendMessage('I have a fever')">
+                    <i class="bi bi-thermometer-half me-1"></i>Fever
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-primary ripple" onclick="quickSendMessage('I have a cough')">
+                    <i class="bi bi-lungs me-1"></i>Cough
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-primary ripple" onclick="quickSendMessage('What are emergency symptoms?')">
+                    <i class="bi bi-exclamation-triangle me-1"></i>Emergency
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-primary ripple" onclick="quickSendMessage('help')">
+                    <i class="bi bi-question-circle me-1"></i>Help
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 text-center fade-up-element delay-4">
+            <div class="alert alert-info">
+              <i class="bi bi-shield-lock me-2"></i>
+              <small>
+                This chatbot provides general health information only. For medical emergencies, please contact your local emergency services immediately.
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/chat.js?v=2.0"></script>
+
+    <script>
+      // Quick send function
+      function quickSendMessage(message) {
+        document.getElementById('textInput').value = message;
+        document.getElementById('chatForm').dispatchEvent(new Event('submit'));
+      }
+
+      // Auto-resize textarea
+      const textarea = document.getElementById('textInput');
+      textarea.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+      });
+
+      // Hide loading screen when page is fully loaded
+      window.addEventListener('load', function() {
+        setTimeout(() => {
+          const loadingScreen = document.getElementById('loadingScreen');
+          loadingScreen.classList.add('hidden');
+          setTimeout(() => loadingScreen.remove(), 500);
+        }, 500);
+      });
+
+      // Add entrance animations when page loads
+      document.addEventListener('DOMContentLoaded', function() {
+        // Trigger animations by adding classes after a short delay
+        setTimeout(() => {
+          document.querySelector('nav').classList.add('fade-in-element');
+          document.querySelector('.container').classList.add('fade-in-element');
+        }, 100);
+
+        // Add ripple effect to all buttons with ripple class
+        document.querySelectorAll('.ripple').forEach(button => {
+          button.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple-effect');
+            
+            this.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 600);
+          });
+        });
+      });
+
+      // Add keyboard shortcuts
+      document.addEventListener('keydown', function(e) {
+        // Ctrl/Cmd + K to focus input
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+          e.preventDefault();
+          document.getElementById('textInput').focus();
+        }
+        
+        // Ctrl/Cmd + L to clear chat
+        if ((e.ctrlKey || e.metaKey) && e.key === 'l') {
+          e.preventDefault();
+          clearChat();
+        }
+      });
+    </script>
+  </body>
+</html>

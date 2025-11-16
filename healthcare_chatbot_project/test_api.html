@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test - Healthcare Chatbot</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #0d1117;
+            color: #c9d1d9;
+        }
+        .test-section {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        button {
+            background: #58a6ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #1f6feb;
+        }
+        .result {
+            background: #1c2128;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 15px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .success {
+            color: #3fb950;
+        }
+        .error {
+            color: #f85149;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #c9d1d9;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 API Test Page</h1>
+    <p>This page tests if the chatbot API is working correctly.</p>
+
+    <div class="test-section">
+        <h2>Test 1: Check Server Connection</h2>
+        <button onclick="testConnection()">Test Connection</button>
+        <div id="connection-result" class="result" style="display: none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Send Test Message</h2>
+        <input type="text" id="testMessage" placeholder="Enter test message (e.g., 'I have a fever')" value="I have a fever">
+        <button onclick="testMessage()">Send Message</button>
+        <div id="message-result" class="result" style="display: none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Check CSRF Token</h2>
+        <button onclick="testCSRF()">Check CSRF</button>
+        <div id="csrf-result" class="result" style="display: none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 4: Browser Console</h2>
+        <p>Open browser console (F12) to see detailed logs.</p>
+        <button onclick="window.location.href='http://127.0.0.1:8000/'">Go to Chatbot</button>
+    </div>
+
+    <script>
+        async function testConnection() {
+            const resultDiv = document.getElementById('connection-result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = 'Testing connection...';
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/');
+                if (response.ok) {
+                    resultDiv.innerHTML = '<span class="success">✅ SUCCESS: Server is running!</span>\nStatus: ' + response.status;
+                } else {
+                    resultDiv.innerHTML = '<span class="error">❌ ERROR: Server returned status ' + response.status + '</span>';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = '<span class="error">❌ ERROR: Cannot connect to server</span>\n' + error.message + '\n\nMake sure Django server is running:\npython manage.py runserver';
+            }
+        }
+
+        async function testMessage() {
+            const resultDiv = document.getElementById('message-result');
+            const message = document.getElementById('testMessage').value;
+            
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = 'Sending message: "' + message + '"...';
+
+            try {
+                const formData = new FormData();
+                formData.append('text', message);
+
+                const response = await fetch('http://127.0.0.1:8000/api/message/', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'same-origin'
+                });
+
+                console.log('Response status:', response.status);
+                const data = await response.json();
+                console.log('Response data:', data);
+
+                if (response.ok && data.response) {
+                    resultDiv.innerHTML = '<span class="success">✅ SUCCESS: API is working!</span>\n\n' +
+                        'Request:\n' + JSON.stringify({text: message}, null, 2) + '\n\n' +
+                        'Response:\n' + JSON.stringify(data, null, 2);
+                } else {
+                    resultDiv.innerHTML = '<span class="error">❌ ERROR: API returned unexpected response</span>\n\n' +
+                        JSON.stringify(data, null, 2);
+                }
+            } catch (error) {
+                resultDiv.innerHTML = '<span class="error">❌ ERROR: Failed to send message</span>\n' + 
+                    error.message + '\n\nCheck browser console for details.';
+                console.error('Error:', error);
+            }
+        }
+
+        async function testCSRF() {
+            const resultDiv = document.getElementById('csrf-result');
+            resultDiv.style.display = 'block';
+
+            // Check cookie
+            const cookies = document.cookie.split(';');
+            let csrfCookie = null;
+            for (let cookie of cookies) {
+                const [name, value] = cookie.trim().split('=');
+                if (name === 'csrftoken') {
+                    csrfCookie = value;
+                    break;
+                }
+            }
+
+            let result = 'CSRF Token Check:\n\n';
+            
+            if (csrfCookie) {
+                result += '<span class="success">✅ CSRF cookie found</span>\n';
+                result += 'Token: ' + csrfCookie.substring(0, 20) + '...\n\n';
+            } else {
+                result += '<span class="error">❌ CSRF cookie not found</span>\n';
+                result += 'This might cause issues with POST requests.\n\n';
+            }
+
+            result += 'All cookies:\n' + document.cookie;
+
+            resultDiv.innerHTML = result;
+        }
+
+        // Auto-test on load
+        window.addEventListener('load', () => {
+            console.log('API Test Page Loaded');
+            console.log('Server should be at: http://127.0.0.1:8000/');
+        });
+    </script>
+</body>
+</html>

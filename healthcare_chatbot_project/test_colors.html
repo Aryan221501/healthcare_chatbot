@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Color Test - Healthcare Chatbot</title>
+    <link rel="stylesheet" href="static/styles.css?v=2.0">
+    <style>
+        body {
+            padding: 40px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        .test-box {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 2px solid;
+        }
+        .color-info {
+            font-family: monospace;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        h1 {
+            color: var(--dark-text-primary);
+        }
+        .success {
+            background: #3fb950;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .error {
+            background: #f85149;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 Color Test Page</h1>
+    <p>This page tests if the new dark mode colors are loading correctly.</p>
+
+    <div id="result"></div>
+
+    <div class="test-box" style="background: var(--dark-bg-primary); border-color: var(--border-color);">
+        <h3 style="color: var(--dark-text-primary);">Primary Background</h3>
+        <div class="color-info">
+            <strong>Expected:</strong> #0d1117 (dark gray)<br>
+            <strong>Old:</strong> #0a0e27 (purple-blue)<br>
+            <strong>Actual:</strong> <span id="bg-primary"></span>
+        </div>
+    </div>
+
+    <div class="test-box" style="background: var(--dark-bg-secondary); border-color: var(--border-color);">
+        <h3 style="color: var(--dark-text-primary);">Secondary Background</h3>
+        <div class="color-info">
+            <strong>Expected:</strong> #161b22 (dark gray)<br>
+            <strong>Old:</strong> #151a2e (purple-blue)<br>
+            <strong>Actual:</strong> <span id="bg-secondary"></span>
+        </div>
+    </div>
+
+    <div class="test-box" style="background: var(--dark-bg-tertiary); border-color: var(--border-color);">
+        <h3 style="color: var(--dark-text-primary);">Tertiary Background</h3>
+        <div class="color-info">
+            <strong>Expected:</strong> #1c2128 (dark gray)<br>
+            <strong>Old:</strong> #1e2538 (purple-blue)<br>
+            <strong>Actual:</strong> <span id="bg-tertiary"></span>
+        </div>
+    </div>
+
+    <div class="test-box" style="background: var(--dark-bg-primary); border-color: var(--dark-accent-primary);">
+        <h3 style="color: var(--dark-accent-primary);">Accent Color</h3>
+        <div class="color-info">
+            <strong>Expected:</strong> #58a6ff (blue)<br>
+            <strong>Old:</strong> #667eea (purple)<br>
+            <strong>Actual:</strong> <span id="accent"></span>
+        </div>
+    </div>
+
+    <div class="test-box" style="background: var(--dark-bg-primary); border-color: var(--border-color);">
+        <h3 style="color: var(--dark-text-primary);">Text Color</h3>
+        <div class="color-info">
+            <strong>Expected:</strong> #c9d1d9 (light gray)<br>
+            <strong>Old:</strong> #e8eaf6 (purple-tinted)<br>
+            <strong>Actual:</strong> <span id="text"></span>
+        </div>
+    </div>
+
+    <div class="test-box" style="background: var(--dark-bg-primary); border-color: var(--border-color);">
+        <h3 style="color: var(--dark-text-primary);">Border Color</h3>
+        <div class="color-info">
+            <strong>Expected:</strong> #30363d (gray)<br>
+            <strong>Old:</strong> rgba(102, 126, 234, 0.2) (purple)<br>
+            <strong>Actual:</strong> <span id="border"></span>
+        </div>
+    </div>
+
+    <script>
+        // Get computed colors
+        const root = document.documentElement;
+        const style = getComputedStyle(root);
+
+        const bgPrimary = style.getPropertyValue('--dark-bg-primary').trim();
+        const bgSecondary = style.getPropertyValue('--dark-bg-secondary').trim();
+        const bgTertiary = style.getPropertyValue('--dark-bg-tertiary').trim();
+        const accent = style.getPropertyValue('--dark-accent-primary').trim();
+        const text = style.getPropertyValue('--dark-text-primary').trim();
+        const border = style.getPropertyValue('--border-color').trim();
+
+        // Display actual colors
+        document.getElementById('bg-primary').textContent = bgPrimary;
+        document.getElementById('bg-secondary').textContent = bgSecondary;
+        document.getElementById('bg-tertiary').textContent = bgTertiary;
+        document.getElementById('accent').textContent = accent;
+        document.getElementById('text').textContent = text;
+        document.getElementById('border').textContent = border;
+
+        // Check if colors are correct
+        const isCorrect = 
+            bgPrimary === '#0d1117' &&
+            bgSecondary === '#161b22' &&
+            bgTertiary === '#1c2128' &&
+            accent === '#58a6ff' &&
+            text === '#c9d1d9' &&
+            border === '#30363d';
+
+        const resultDiv = document.getElementById('result');
+        
+        if (isCorrect) {
+            resultDiv.innerHTML = `
+                <div class="success">
+                    <h2>✅ SUCCESS!</h2>
+                    <p>All colors are loading correctly. The new dark mode is active!</p>
+                    <p><strong>You can now go back to the chatbot:</strong></p>
+                    <p><a href="http://127.0.0.1:8000/" style="color: white; text-decoration: underline;">Open Chatbot</a></p>
+                </div>
+            `;
+        } else {
+            resultDiv.innerHTML = `
+                <div class="error">
+                    <h2>❌ COLORS NOT UPDATED</h2>
+                    <p>The old colors are still loading. Try these solutions:</p>
+                    <ol style="text-align: left;">
+                        <li>Hard refresh: <strong>Ctrl + Shift + R</strong> (Windows) or <strong>Cmd + Shift + R</strong> (Mac)</li>
+                        <li>Clear browser cache completely</li>
+                        <li>Try opening in Incognito/Private mode</li>
+                        <li>Restart the Django server</li>
+                        <li>Try a different browser</li>
+                    </ol>
+                    <p>See <strong>TROUBLESHOOTING.md</strong> for detailed instructions.</p>
+                </div>
+            `;
+        }
+
+        // Log to console
+        console.log('Color Test Results:');
+        console.log('Primary BG:', bgPrimary, bgPrimary === '#0d1117' ? '✅' : '❌');
+        console.log('Secondary BG:', bgSecondary, bgSecondary === '#161b22' ? '✅' : '❌');
+        console.log('Tertiary BG:', bgTertiary, bgTertiary === '#1c2128' ? '✅' : '❌');
+        console.log('Accent:', accent, accent === '#58a6ff' ? '✅' : '❌');
+        console.log('Text:', text, text === '#c9d1d9' ? '✅' : '❌');
+        console.log('Border:', border, border === '#30363d' ? '✅' : '❌');
+    </script>
+</body>
+</html>
