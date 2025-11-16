@@ -136,7 +136,7 @@ The bot will immediately flag emergencies and advise calling 911.
 **In Console (Terminal):**
 Look for these indicators:
 ```
-✅ Gemini API initialized successfully (key: AIzaSyC3ES...)
+✅ Gemini API initialized successfully (key: your-api-key...)
 🤖 Sending request to Gemini AI...
 📝 User message: [your message]...
 ✅ Gemini AI responded successfully (XXX chars)
@@ -195,7 +195,7 @@ healthcare_chatbot_project/
 
 ### API Key (.env file)
 ```
-GEMINI_API_KEY=AIzaSyC3ES3HHhIv0ALx_xMhBxm1vy8xghRcW54
+GEMINI_API_KEY=your-actual-api-key-here
 ```
 
 ### Settings (healthcare/settings.py)

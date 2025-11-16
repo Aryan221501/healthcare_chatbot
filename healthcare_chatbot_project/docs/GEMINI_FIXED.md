@@ -64,7 +64,7 @@ Open http://localhost:8000 and try these questions:
 ### In Console:
 You'll see detailed logs like:
 ```
-✅ Gemini API initialized successfully (key: AIzaSyC3ES...)
+✅ Gemini API initialized successfully (key: your-api-key...)
 🤖 Sending request to Gemini AI...
 📝 User message: Hello, how are you?...
 🆕 Starting new conversation
