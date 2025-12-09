@@ -5,6 +5,7 @@ from .models import Conversation
 from .medical_kb import MEDICAL_KB, EMERGENCY_KEYWORDS, EMERGENCY_RESPONSE
 from .gemini_integration import get_gemini_response, get_gemini_diagnosis, is_gemini_available
 from .diagnosis_engine import get_diagnosis_category, get_first_question, get_next_question, DIAGNOSIS_TREES
+from .comprehensive_diagnosis import COMPREHENSIVE_DIAGNOSIS_TREES, get_comprehensive_diagnosis_category
 import re, uuid
 
 # Store diagnosis sessions and conversation history
@@ -48,72 +49,84 @@ def match_kb(lang, text):
     if lang == 'en':
         for greeting in greetings_en:
             if greeting in text_lower:
-                return """👋 **Hello! I'm your Healthcare Assistant**
+                return """<h3>Hello! I'm your Healthcare Assistant</h3>
 
-I can help you with information about:
-• Common illnesses (cold, flu, fever, cough)
-• Chronic conditions (diabetes, hypertension, asthma)
-• Symptoms and treatments
-• When to see a doctor
-• Emergency situations
-• General health and wellness
+<p>I can help you with information about:</p>
+<ul>
+<li>Common illnesses (cold, flu, fever, cough)</li>
+<li>Chronic conditions (diabetes, hypertension, asthma)</li>
+<li>Symptoms and treatments</li>
+<li>When to see a doctor</li>
+<li>Emergency situations</li>
+<li>General health and wellness</li>
+</ul>
 
-**How to use:**
-• Describe your symptoms (e.g., "I have a fever and cough")
-• Ask about a condition (e.g., "Tell me about diabetes")
-• Type "help" for more information
+<h4>How to use</h4>
+<ul>
+<li>Describe your symptoms (e.g., "I have a fever and cough")</li>
+<li>Ask about a condition (e.g., "Tell me about diabetes")</li>
+<li>Type "help" for more information</li>
+</ul>
 
-**Important:** This is for informational purposes only. Always consult a healthcare professional for medical advice.
+<p><em>Important: This is for informational purposes only. Always consult a healthcare professional for medical advice.</em></p>
 
-What can I help you with today?"""
+<p>What can I help you with today?</p>"""
     else:
         for greeting in greetings_hi:
             if greeting in text_lower:
-                return """👋 **नमस्ते! मैं आपका स्वास्थ्य सहायक हूं**
+                return """<h3>नमस्ते! मैं आपका स्वास्थ्य सहायक हूं</h3>
 
-मैं आपकी मदद कर सकता हूं:
-• सामान्य बीमारियां (सर्दी, फ्लू, बुखार, खांसी)
-• पुरानी स्थितियां (मधुमेह, उच्च रक्तचाप, अस्थमा)
-• लक्षण और उपचार
-• डॉक्टर से कब मिलें
-• आपातकालीन स्थितियां
+<p>मैं आपकी मदद कर सकता हूं:</p>
+<ul>
+<li>सामान्य बीमारियां (सर्दी, फ्लू, बुखार, खांसी)</li>
+<li>पुरानी स्थितियां (मधुमेह, उच्च रक्तचाप, अस्थमा)</li>
+<li>लक्षण और उपचार</li>
+<li>डॉक्टर से कब मिलें</li>
+<li>आपातकालीन स्थितियां</li>
+</ul>
 
-अपने लक्षण बताएं या किसी स्थिति के बारे में पूछें।"""
+<p>अपने लक्षण बताएं या किसी स्थिति के बारे में पूछें।</p>"""
     
     # Help command
     if 'help' in text_lower or 'सहाय' in text_lower:
         if lang == 'en':
-            return """ℹ️ **How I Can Help**
+            return """<h3>How I Can Help</h3>
 
-**Available Topics:**
-• **Common Illnesses:** Cold, flu, fever, cough, headache
-• **Digestive Issues:** Stomach pain, nausea, diarrhea
-• **Chronic Conditions:** Diabetes, hypertension, asthma, heart disease
-• **Allergies:** Seasonal, food, skin reactions
-• **Mental Health:** Depression, anxiety, stress
-• **COVID-19:** Symptoms, prevention, treatment
-• **General Health:** Wellness tips, preventive care
+<h4>Available Topics</h4>
+<ul>
+<li><strong>Common Illnesses:</strong> Cold, flu, fever, cough, headache</li>
+<li><strong>Digestive Issues:</strong> Stomach pain, nausea, diarrhea</li>
+<li><strong>Chronic Conditions:</strong> Diabetes, hypertension, asthma, heart disease</li>
+<li><strong>Allergies:</strong> Seasonal, food, skin reactions</li>
+<li><strong>Mental Health:</strong> Depression, anxiety, stress</li>
+<li><strong>COVID-19:</strong> Symptoms, prevention, treatment</li>
+<li><strong>General Health:</strong> Wellness tips, preventive care</li>
+</ul>
 
-**Example Questions:**
-• "I have a fever and body aches"
-• "What are the symptoms of diabetes?"
-• "How do I manage high blood pressure?"
-• "I'm feeling anxious and stressed"
+<h4>Example Questions</h4>
+<ul>
+<li>"I have a fever and body aches"</li>
+<li>"What are the symptoms of diabetes?"</li>
+<li>"How do I manage high blood pressure?"</li>
+<li>"I'm feeling anxious and stressed"</li>
+</ul>
 
-**Emergency:** If you're experiencing a medical emergency, call 911 immediately!
+<p><strong style="color: #ef4444;">Emergency:</strong> If you're experiencing a medical emergency, call 911 immediately!</p>
 
-What would you like to know about?"""
+<p>What would you like to know about?</p>"""
         else:
-            return """ℹ️ **मैं कैसे मदद कर सकता हूं**
+            return """<h3>मैं कैसे मदद कर सकता हूं</h3>
 
-**उपलब्ध विषय:**
-• सामान्य बीमारियां
-• पाचन समस्याएं
-• पुरानी स्थितियां
-• एलर्जी
-• मानसिक स्वास्थ्य
+<h4>उपलब्ध विषय</h4>
+<ul>
+<li>सामान्य बीमारियां</li>
+<li>पाचन समस्याएं</li>
+<li>पुरानी स्थितियां</li>
+<li>एलर्जी</li>
+<li>मानसिक स्वास्थ्य</li>
+</ul>
 
-अपने लक्षण या प्रश्न बताएं।"""
+<p>अपने लक्षण या प्रश्न बताएं।</p>"""
     
     # Try to match medical condition
     medical_response = match_medical_condition(lang, text)
@@ -122,27 +135,31 @@ What would you like to know about?"""
     
     # Fallback response
     if lang == 'en':
-        return """I'm not sure I understand your question. 
+        return """<p>I'm not sure I understand your question.</p>
 
-**Try:**
-• Describing your symptoms (e.g., "I have a headache")
-• Asking about a specific condition (e.g., "What is diabetes?")
-• Typing "help" to see what I can assist with
+<h4>Try</h4>
+<ul>
+<li>Describing your symptoms (e.g., "I have a headache")</li>
+<li>Asking about a specific condition (e.g., "What is diabetes?")</li>
+<li>Typing "help" to see what I can assist with</li>
+</ul>
 
-**Common topics I can help with:**
-• Fever, cough, cold, flu
-• Headaches and body aches
-• Stomach problems
-• Allergies
-• Chronic conditions (diabetes, hypertension, asthma)
-• Mental health
-• General wellness
+<h4>Common topics I can help with</h4>
+<ul>
+<li>Fever, cough, cold, flu</li>
+<li>Headaches and body aches</li>
+<li>Stomach problems</li>
+<li>Allergies</li>
+<li>Chronic conditions (diabetes, hypertension, asthma)</li>
+<li>Mental health</li>
+<li>General wellness</li>
+</ul>
 
-What would you like to know?"""
+<p>What would you like to know?</p>"""
     else:
-        return """मुझे आपका प्रश्न समझ नहीं आया।
+        return """<p>मुझे आपका प्रश्न समझ नहीं आया।</p>
 
-कृपया अपने लक्षण बताएं या "help" टाइप करें।"""
+<p>कृपया अपने लक्षण बताएं या "help" टाइप करें।</p>"""
 
 @ensure_csrf_cookie
 def index(request):
@@ -256,27 +273,57 @@ def start_diagnosis(session, text, lang):
     if lang != 'en':
         return "Diagnosis feature is currently available in English only. / निदान सुविधा वर्तमान में केवल अंग्रेजी में उपलब्ध है।"
     
-    # Determine diagnosis category
-    category = get_diagnosis_category(text)
+    # Try comprehensive diagnosis first
+    category = get_comprehensive_diagnosis_category(text)
+    diagnosis_tree = COMPREHENSIVE_DIAGNOSIS_TREES
+    
+    # Fall back to original diagnosis if not found
+    if not category:
+        category = get_diagnosis_category(text)
+        diagnosis_tree = DIAGNOSIS_TREES
     
     if not category:
-        return """🔍 **Interactive Diagnosis**
+        return """🔍 **Interactive Diagnosis System**
 
 I can help diagnose your condition by asking you a series of yes/no questions.
 
 **Available diagnosis categories:**
-• **Respiratory issues:** Cough, cold, flu, breathing problems
-• **Digestive issues:** Stomach pain, nausea, diarrhea
+
+**🫁 Respiratory Issues:**
+• Cough, cold, flu, breathing problems, asthma, bronchitis
+
+**🤢 Digestive Issues:**
+• Stomach pain, nausea, diarrhea, constipation, GERD
+
+**❤️ Cardiovascular Issues:**
+• Chest pain, heart palpitations, irregular heartbeat
+
+**🧠 Neurological Issues:**
+• Headache, migraine, dizziness, numbness, tingling
+
+**🌿 Skin Issues:**
+• Rash, itching, acne, eczema, psoriasis
+
+**💙 Mental Health:**
+• Anxiety, depression, stress, panic attacks
+
+**🦴 Muscle & Joint Issues:**
+• Back pain, joint pain, arthritis, sprains
 
 **To start, describe your main symptoms. For example:**
-• "I have a cough and fever"
-• "My stomach hurts"
-• "I'm having trouble breathing"
+• "I have chest pain"
+• "I have a severe headache"
+• "I have a rash on my arm"
+• "I'm feeling anxious"
 
-Or type "diagnose respiratory" or "diagnose digestive" to start."""
+Or type "diagnose [category]" to start."""
     
-    # Get first question
-    first_question = get_first_question(category)
+    # Get first question from appropriate tree
+    if category in COMPREHENSIVE_DIAGNOSIS_TREES:
+        tree = COMPREHENSIVE_DIAGNOSIS_TREES[category]
+        first_question = tree['questions'][0] if tree['questions'] else None
+    else:
+        first_question = get_first_question(category)
     
     if not first_question:
         return "Sorry, I couldn't start the diagnosis. Please try describing your symptoms."
@@ -285,10 +332,11 @@ Or type "diagnose respiratory" or "diagnose digestive" to start."""
     diagnosis_sessions[session] = {
         'category': category,
         'current_question': first_question['id'],
-        'answers': []
+        'answers': [],
+        'tree_type': 'comprehensive' if category in COMPREHENSIVE_DIAGNOSIS_TREES else 'original'
     }
     
-    return f"""🔍 **Starting Interactive Diagnosis**
+    return f"""🔍 **Starting Interactive Diagnosis: {diagnosis_tree[category]['name']}**
 
 I'll ask you a series of yes/no questions to help identify your condition.
 
@@ -323,6 +371,7 @@ Type "cancel" if you want to stop the diagnosis."""
     session_data = diagnosis_sessions[session]
     category = session_data['category']
     current_question_id = session_data['current_question']
+    tree_type = session_data.get('tree_type', 'original')
     
     # Store answer
     session_data['answers'].append({
@@ -330,8 +379,46 @@ Type "cancel" if you want to stop the diagnosis."""
         'answer': answer
     })
     
-    # Get next question or diagnosis
-    next_step = get_next_question(category, current_question_id, answer)
+    # Get next question or diagnosis based on tree type
+    if tree_type == 'comprehensive':
+        # Use comprehensive diagnosis tree
+        tree = COMPREHENSIVE_DIAGNOSIS_TREES[category]
+        current_q = None
+        for q in tree['questions']:
+            if q['id'] == current_question_id:
+                current_q = q
+                break
+        
+        if not current_q:
+            del diagnosis_sessions[session]
+            return "Sorry, something went wrong. Please try again."
+        
+        next_id = current_q.get('yes' if answer else 'no')
+        
+        if next_id and next_id.startswith('diagnosis_'):
+            # We have a diagnosis
+            diagnosis = tree['diagnoses'].get(next_id)
+            if diagnosis:
+                del diagnosis_sessions[session]
+                next_step = {'type': 'diagnosis', 'data': diagnosis}
+            else:
+                del diagnosis_sessions[session]
+                return "Sorry, something went wrong. Please try again."
+        else:
+            # Get next question
+            next_q = None
+            for q in tree['questions']:
+                if q['id'] == next_id:
+                    next_q = q
+                    break
+            if next_q:
+                next_step = {'type': 'question', 'data': next_q}
+            else:
+                del diagnosis_sessions[session]
+                return "Sorry, something went wrong. Please try again."
+    else:
+        # Use original diagnosis tree
+        next_step = get_next_question(category, current_question_id, answer)
     
     if not next_step:
         del diagnosis_sessions[session]

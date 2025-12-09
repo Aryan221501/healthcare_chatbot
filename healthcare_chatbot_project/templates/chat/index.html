@@ -9,7 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}?v=2.0">
+    <link rel="stylesheet" href="/static/styles.css?v=5.0">
     <style>
       /* Entrance animations */
       @keyframes fadeInUp {
@@ -272,7 +272,7 @@
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{% static 'js/chat.js' %}?v=2.0"></script>
+    <script src="/static/chat.js?v=5.0"></script>
 
     <script>
       // Quick send function
@@ -340,6 +340,276 @@
           clearChat();
         }
       });
+
+      // ===== CYBER ANIMATIONS WITH ANIME.JS =====
+      
+      // Cursor Trail Effect
+      let cursorTrails = [];
+      const maxTrails = 5;
+      
+      for (let i = 0; i < maxTrails; i++) {
+        const trail = document.createElement('div');
+        trail.className = 'cursor-trail';
+        document.body.appendChild(trail);
+        cursorTrails.push(trail);
+      }
+      
+      let mouseX = 0, mouseY = 0;
+      
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        
+        cursorTrails.forEach((trail, index) => {
+          setTimeout(() => {
+            anime({
+              targets: trail,
+              left: mouseX + 'px',
+              top: mouseY + 'px',
+              opacity: [0, 0.6, 0],
+              scale: [0.5, 1, 0.5],
+              duration: 800,
+              easing: 'easeOutExpo'
+            });
+          }, index * 50);
+        });
+      });
+      
+      // Floating Particles
+      function createParticles() {
+        for (let i = 0; i < 20; i++) {
+          const particle = document.createElement('div');
+          particle.className = 'particle';
+          particle.style.left = Math.random() * 100 + '%';
+          particle.style.top = Math.random() * 100 + '%';
+          document.body.appendChild(particle);
+          
+          anime({
+            targets: particle,
+            translateY: [0, -100],
+            translateX: () => anime.random(-50, 50),
+            opacity: [0.6, 0],
+            duration: () => anime.random(3000, 6000),
+            easing: 'linear',
+            loop: true,
+            delay: () => anime.random(0, 3000)
+          });
+        }
+      }
+      
+      createParticles();
+      
+      // Hexagon Decorations
+      function createHexagons() {
+        for (let i = 0; i < 5; i++) {
+          const hex = document.createElement('div');
+          hex.className = 'hex-decoration';
+          hex.style.left = Math.random() * 100 + '%';
+          hex.style.top = Math.random() * 100 + '%';
+          hex.style.opacity = Math.random() * 0.3;
+          document.body.appendChild(hex);
+          
+          anime({
+            targets: hex,
+            rotate: 360,
+            duration: () => anime.random(10000, 20000),
+            easing: 'linear',
+            loop: true
+          });
+        }
+      }
+      
+      createHexagons();
+      
+      // Card Entrance Animation
+      anime({
+        targets: '.card',
+        opacity: [0, 1],
+        translateY: [50, 0],
+        scale: [0.9, 1],
+        duration: 1000,
+        easing: 'easeOutExpo',
+        delay: 500
+      });
+      
+      // Navbar Animation
+      anime({
+        targets: '.navbar',
+        opacity: [0, 1],
+        translateY: [-50, 0],
+        duration: 800,
+        easing: 'easeOutExpo'
+      });
+      
+      // Button Hover Animation
+      document.querySelectorAll('.btn').forEach(btn => {
+        btn.addEventListener('mouseenter', function() {
+          anime({
+            targets: this,
+            scale: 1.05,
+            duration: 300,
+            easing: 'easeOutExpo'
+          });
+        });
+        
+        btn.addEventListener('mouseleave', function() {
+          anime({
+            targets: this,
+            scale: 1,
+            duration: 300,
+            easing: 'easeOutExpo'
+          });
+        });
+      });
+      
+      // Message Bubble Animation (will be called when new message appears)
+      window.animateMessage = function(element) {
+        anime({
+          targets: element,
+          opacity: [0, 1],
+          translateX: element.classList.contains('user-message') ? [50, 0] : [-50, 0],
+          scale: [0.8, 1],
+          duration: 600,
+          easing: 'easeOutElastic(1, .8)'
+        });
+      };
+      
+      // Glitch Effect on Brand
+      setInterval(() => {
+        const brand = document.querySelector('.navbar-brand');
+        if (brand) {
+          brand.classList.add('glitch');
+          setTimeout(() => brand.classList.remove('glitch'), 200);
+        }
+      }, 5000);
+      
+      // Typing Indicator Animation
+      window.animateTypingIndicator = function(show) {
+        const indicator = document.querySelector('.typing-indicator');
+        if (indicator) {
+          if (show) {
+            anime({
+              targets: indicator,
+              opacity: [0, 1],
+              translateY: [20, 0],
+              duration: 400,
+              easing: 'easeOutExpo'
+            });
+          } else {
+            anime({
+              targets: indicator,
+              opacity: [1, 0],
+              translateY: [0, -20],
+              duration: 400,
+              easing: 'easeInExpo'
+            });
+          }
+        }
+      };
+      
+      // Input Focus Animation
+      const textInput = document.getElementById('textInput');
+      if (textInput) {
+        textInput.addEventListener('focus', function() {
+          anime({
+            targets: this,
+            boxShadow: ['0 0 0 rgba(0,255,65,0)', '0 0 30px rgba(0,255,65,0.6)'],
+            duration: 500,
+            easing: 'easeOutExpo'
+          });
+        });
+        
+        textInput.addEventListener('blur', function() {
+          anime({
+            targets: this,
+            boxShadow: ['0 0 30px rgba(0,255,65,0.6)', '0 0 0 rgba(0,255,65,0)'],
+            duration: 500,
+            easing: 'easeOutExpo'
+          });
+        });
+      }
+      
+      // Card Hover Effect
+      const card = document.querySelector('.card');
+      if (card) {
+        card.addEventListener('mouseenter', function() {
+          anime({
+            targets: this,
+            boxShadow: [
+              '0 0 20px rgba(0,255,65,0.3)',
+              '0 0 40px rgba(0,255,65,0.6)'
+            ],
+            duration: 500,
+            easing: 'easeOutExpo'
+          });
+        });
+        
+        card.addEventListener('mouseleave', function() {
+          anime({
+            targets: this,
+            boxShadow: [
+              '0 0 40px rgba(0,255,65,0.6)',
+              '0 0 20px rgba(0,255,65,0.3)'
+            ],
+            duration: 500,
+            easing: 'easeOutExpo'
+          });
+        });
+      }
+      
+      // Parallax Effect on Mouse Move
+      document.addEventListener('mousemove', (e) => {
+        const moveX = (e.clientX - window.innerWidth / 2) / 50;
+        const moveY = (e.clientY - window.innerHeight / 2) / 50;
+        
+        anime({
+          targets: '.hex-decoration',
+          translateX: moveX,
+          translateY: moveY,
+          duration: 1000,
+          easing: 'easeOutExpo'
+        });
+      });
+      
+      // Text Typing Effect for Brand
+      const brandText = document.querySelector('.navbar-brand span');
+      if (brandText) {
+        const originalText = brandText.textContent;
+        brandText.textContent = '';
+        
+        let i = 0;
+        const typeInterval = setInterval(() => {
+          if (i < originalText.length) {
+            brandText.textContent += originalText.charAt(i);
+            i++;
+          } else {
+            clearInterval(typeInterval);
+          }
+        }, 100);
+      }
+      
+      // Pulse Animation for Online Status
+      anime({
+        targets: '.text-success i',
+        scale: [1, 1.3, 1],
+        opacity: [1, 0.7, 1],
+        duration: 2000,
+        easing: 'easeInOutQuad',
+        loop: true
+      });
+      
+      // Quick Action Buttons Animation
+      anime({
+        targets: '.btn-outline-primary',
+        opacity: [0, 1],
+        translateY: [20, 0],
+        delay: anime.stagger(100, {start: 1000}),
+        duration: 600,
+        easing: 'easeOutExpo'
+      });
+      
+      console.log('%c🔐 CYBER SYSTEM INITIALIZED', 'color: #00ff41; font-size: 16px; font-weight: bold; text-shadow: 0 0 10px #00ff41;');
+      console.log('%c⚡ All animations loaded', 'color: #00ff41; font-size: 12px;');
     </script>
   </body>
 </html>

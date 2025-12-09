@@ -1,32 +1,29 @@
-# Environment variables (IMPORTANT - protects your API key!)
-.env
-*.env
-
 # Python
 __pycache__/
-*.py[cod]
-*$py.class
-*.so
+*.pyc
+*.pyo
+*.pyd
 .Python
+env/
+venv/
+ENV/
 
 # Django
 *.log
+local_settings.py
 db.sqlite3
-db.sqlite3-journal
-/static/
-/media/
+media/
+staticfiles/
 
-# Virtual Environment
-venv/
-env/
-ENV/
+# Environment variables
+.env
+.env.local
+.env.dev
+.env.production
 
 # IDE
 .vscode/
 .idea/
-*.swp
-*.swo
-*~
 
 # OS
 .DS_Store

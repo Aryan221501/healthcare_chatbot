@@ -1,150 +1,256 @@
-# Healthcare Chatbot
+# 🏥 HealthBot AI - Healthcare Chatbot
 
-A comprehensive healthcare chatbot application built with Django, featuring both rule-based responses and AI-powered medical assistance through Google's Gemini API.
+An intelligent healthcare chatbot powered by Google Gemini AI with comprehensive medical diagnosis capabilities.
 
-## 🚀 Features
+## ✨ Features
 
-- **Multilingual Support**: English and Hindi with capability to add more languages
-- **AI-Powered Responses**: Integration with Google Gemini API for intelligent responses
-- **Emergency Detection**: Automatic detection of emergency keywords with appropriate escalation
-- **Conversation Logging**: All interactions are stored in SQLite database
-- **Responsive UI**: Bootstrap-based frontend with modern design
-- **Medical Diagnosis**: AI-powered symptom-based diagnosis assistance
-- **Typing Animation**: Enhanced user experience with typing indicators
-- **Dark Mode**: Comfortable viewing in low-light environments
+- 🤖 **AI-Powered Responses** - Google Gemini 2.5 Flash integration
+- 🔍 **Medical Diagnosis** - Interactive diagnosis for 7+ categories
+- 💬 **Natural Language** - Understands complex medical questions
+- 🌐 **Bilingual Support** - English and Hindi
+- 🎨 **Modern UI** - Premium dark theme with emerald accents
+- 📱 **Responsive Design** - Works on all devices
+- 🔒 **Privacy Focused** - No data collection
 
-## 🛠️ Tech Stack
+## 🚀 Quick Start
 
-- **Backend**: Django (Python)
-- **Frontend**: HTML, CSS, JavaScript, Bootstrap
-- **Database**: SQLite (with capability to scale to PostgreSQL/MySQL)
-- **AI Integration**: Google Gemini API
-- **Environment Management**: python-dotenv
+### 
+1. Install Dependencies
 
-## 📋 Prerequisites
-
-- Python 3.8 or higher
-- pip (Python package manager)
-
-## 🚀 Getting Started
-
-### 1. Clone the repository
-```bash
-git clone https://github.com/Aryan221501/healthcare_chatbot.git
-cd healthcare_chatbot
-```
-
-### 2. Set up virtual environment
-```bash
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment
-# On Windows:
-venv\Scripts\activate
-# On macOS/Linux:
-source venv/bin/activate
-```
-
-### 3. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Configure API keys
-- Get your Google Gemini API key from [Google AI Studio](https://aistudio.google.com/)
-- Copy the `.env.example` file to `.env`:
-```bash
-cp .env.example .env
-```
-- Add your API key to the `.env` file:
-```env
-GEMINI_API_KEY=your_actual_api_key_here
-```
+### 2. Setup Gemini API Key
 
-> ⚠️ **Security Warning**: Never commit your actual API keys to version control. The `.env` file is included in `.gitignore` for security.
+1. Get your FREE API key from: https://makersuite.google.com/app/apikey
+2. Copy the `.env.example` file and rename it to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+3. Replace `your_api_key_here` with your actual API key in the `.env` file:
+   ```
+   GEMINI_API_KEY=your_actual_api_key_here
+   ```
 
-### 5. Set up the database
+⚠️ **Important**: Keep your API key secure and never commit the `.env` file to version control.
+
+### 3. Run Migrations
+
 ```bash
 python manage.py migrate
-python manage.py createsuperuser  # Optional: to access admin panel
 ```
 
-### 6. Run the application
+### 4. Start Server
+
 ```bash
 python manage.py runserver
 ```
 
-### 7. Access the application
-Open your browser and go to `http://127.0.0.1:8000/`
+### 5. Open Browser
 
-## 🔧 Configuration
-
-### Environment Variables
-Create a `.env` file in the project root with the following:
-```
-GEMINI_API_KEY=your_actual_api_key_here
-```
-
-### Settings
-The application configuration is in `healthcare/settings.py`. You can modify:
-- Database settings
-- Security settings
-- Static files configuration
-- API timeouts and limits
-
-## 🧪 Testing
-
-Run the test suite to ensure everything is working properly:
-```bash
-python manage.py test
-```
+Navigate to: http://localhost:8000
 
 ## 📁 Project Structure
 
 ```
-healthcare_chatbot/
-├── chat/                 # Chat functionality and AI integration
-│   ├── views.py          # Main application logic
-│   ├── models.py         # Data models
-│   ├── gemini_integration.py  # Google Gemini API integration
-│   └── chatgpt_integration.py # OpenAI ChatGPT integration (fallback)
-├── healthcare/           # Django project settings
-│   └── settings.py       # Configuration settings
-├── templates/            # HTML templates
-├── static/               # CSS, JavaScript, images
-├── .env                 # Environment variables (not committed)
-├── .env.example         # Template for environment variables
-├── manage.py            # Django management commands
-└── requirements.txt     # Python dependencies
+healthcare_chatbot_project/
+├── chat/                      # Main app
+│   ├── views.py              # API endpoints
+│   ├── gemini_integration.py # AI integration
+│   ├── diagnosis_engine.py   # Diagnosis logic
+│   ├── medical_kb.py         # Medical knowledge base
+│   └── comprehensive_diagnosis.py  # Extended diagnosis
+├── static/                    # Static files
+│   ├── styles.css            # Styling
+│   └── chat.js               # Frontend logic
+├── templates/                 # HTML templates
+│   └── chat/
+│       └── index.html        # Main interface
+├── healthcare/                # Django settings
+├── .env                      # Environment variables
+├── manage.py                 # Django management
+└── requirements.txt          # Dependencies
 ```
 
-## ⚠️ Important Notes
+## 🎯 Usage
 
-- This is a healthcare assistant, not a diagnostic tool. Always recommend professional medical consultation.
-- The application includes safety measures to avoid providing unverified medical advice.
-- For production use, connect to verified medical knowledge sources (WHO, CDC, etc.).
-- Ensure compliance with healthcare data privacy regulations (HIPAA, etc.) before production deployment.
+### General Questions
+- "Hello" - Get started
+- "Help" - See available topics
+- "What is diabetes?" - Learn about conditions
 
-## 🤝 Contributing
+### Medical Diagnosis
+- "I have a fever and cough, diagnose me" - AI diagnosis
+- "Start diagnosis" - Interactive yes/no questions
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Commit your changes (`git commit -m 'Add some amazing feature'`)
-5. Push to the branch (`git push origin feature/amazing-feature`)
-6. Open a Pull Request
+### Available Diagnosis Categories
+- 🫁 Respiratory (flu, cold, asthma, bronchitis)
+- 🤢 Digestive (stomach issues, GERD, IBS)
+- ❤️ Cardiovascular (heart conditions)
+- 🧠 Neurological (headaches, migraines)
+- 🌿 Dermatological (skin conditions)
+- 💙 Mental Health (anxiety, depression)
+- 🦴 Musculoskeletal (joint/muscle pain)
 
-## 📄 License
+## 🛠️ Configuration
 
-This project is licensed under the MIT License - see the `LICENSE` file for details.
+### Environment Variables (.env)
+```
+GEMINI_API_KEY=your_api_key_here
+```
+
+### Django Settings
+- Database: SQLite (default)
+- Debug: True (development)
+- Allowed Hosts: localhost
+
+## 🧪 Testing
+
+### Test Gemini Integration
+```bash
+python quick_test.py
+```
+
+### Test Diagnosis System
+```bash
+python setup_gemini.py
+```
+
+## 📚 API Endpoints
+
+### POST /api/message/
+Send a message to the chatbot
+
+**Request:**
+```json
+{
+  "text": "I have a fever",
+  "session": "optional_session_id"
+}
+```
+
+**Response:**
+```json
+{
+  "session": "session_id",
+  "response": "AI response here",
+  "language": "en",
+  "powered_by": "gemini_ai"
+}
+```
+
+## 🎨 Customization
+
+### Change Theme Colors
+Edit `static/styles.css`:
+```css
+:root {
+  --dark-accent-primary: #10b981;  /* Emerald green */
+  --dark-bg-primary: #0a0e1a;      /* Dark navy */
+}
+```
+
+### Modify AI Behavior
+Edit `chat/gemini_integration.py`:
+- Adjust system prompts
+- Change temperature/parameters
+- Customize response format
+
+## 🔒 Security
+
+- ✅ CSRF protection enabled
+- ✅ Environment variables for secrets
+- ✅ No sensitive data logging
+- ✅ API key not exposed to frontend
+
+## 📝 Important Notes
+
+### Medical Disclaimer
+This chatbot provides **general health information only**. It is NOT a substitute for professional medical advice, diagnosis, or treatment.
+
+**Always:**
+- Consult healthcare professionals for medical concerns
+- Call 911 for emergencies
+- Follow your doctor's advice
+
+### API Usage
+- Gemini API is **100% FREE**
+- 60 requests per minute limit
+- No credit card required
 
 ## 🐛 Troubleshooting
 
-See `TROUBLESHOOTING.md` for common issues and solutions.
+### Chatbot Not Responding
+1. Check `.env` has valid API key
+2. Verify server is running
+3. Hard refresh browser (Ctrl+Shift+R)
+4. Check console for errors
 
-For API integration issues, check `GEMINI_INTEGRATED.md` and `CHATGPT_INTEGRATION.md`.
+### API Key Issues
+1. Get new k
+ey from Google AI Studio
+2. Verify key starts with "AIza"
+3. Check for extra spaces
+4. Restart server after adding key
 
-## 📞 Support
+### Database Errors
+```bash
+python manage.py migrate
+python manage.py makemigrations
+```
 
-For support, please open an issue in the GitHub repository.
+## 📦 Dependencies
+
+- Django 4.2+
+- google-generativeai
+- python-dotenv
+- Bootstrap 5.3
+- Bootstrap Icons
+
+## 🤝 Contributing
+
+This is a healthcare education project. Feel free to:
+- Report bugs
+- Suggest features
+- Improve documentation
+- Add medical knowledge
+
+## 📄 License
+
+Educational project - Use responsibly
+
+## 🔗 Links
+
+- Google AI Studio: https://makersuite.google.com/app/apikey
+- Django Docs: https://docs.djangoproject.com/
+- Gemini API: https://ai.google.dev/
+
+## 👨‍💻 Development
+
+### Run in Development
+```bash
+python manage.py runserver
+```
+
+### Create Superuser
+```bash
+python manage.py createsuperuser
+```
+
+### Access Admin
+http://localhost:8000/admin
+
+## 🎓 Learning Resources
+
+- Medical knowledge base in `chat/medical_kb.py`
+- Diagnosis trees in `chat/diagnosis_engine.py`
+- AI prompts in `chat/gemini_integration.py`
+
+---
+
+**Built with ❤️ for healthcare education**
+
+**Version:** 1.0.0  
+**Last Updated:** 2025  
+**Status:** ✅ Production Ready
